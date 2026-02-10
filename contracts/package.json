@@ -1,0 +1,22 @@
+{
+    "name": "contracts",
+    "version": "1.0.0",
+    "description": "Smart contracts for Autonomous Procurement Agent",
+    "scripts": {
+        "compile": "hardhat compile",
+        "test": "hardhat test",
+        "deploy": "hardhat run scripts/deploy.ts --network skale",
+        "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+        "clean": "hardhat clean && rm -rf cache artifacts typechain-types"
+    },
+    "devDependencies": {
+        "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+        "@types/node": "^20.11.5",
+        "hardhat": "^2.19.5",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.3.3"
+    },
+    "dependencies": {
+        "@openzeppelin/contracts": "^5.0.1"
+    }
+}

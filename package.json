@@ -1,0 +1,40 @@
+{
+  "name": "autonomous-procurement-agent",
+  "version": "1.0.0",
+  "description": "Autonomous Procurement Agent for Agentic Commerce - SKALE x402 Hackathon",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "contracts"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace=frontend\" \"npm run dev --workspace=backend\"",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "deploy:contracts": "npm run deploy --workspace=contracts",
+    "clean": "npm run clean --workspaces && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/autonomous-procurement-agent"
+  },
+  "keywords": [
+    "blockchain",
+    "ai",
+    "procurement",
+    "skale",
+    "gemini",
+    "hackathon"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
