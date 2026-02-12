@@ -243,18 +243,35 @@ export default function Home() {
               </div>
             </main>
 
-            {/* Platform Footer */}
-            <footer className="mt-40 pb-6 pt-20 border-t border-white/5 text-center relative z-10 w-full">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-12 px-10">
-                <p className="text-xs font-mono text-slate-600 tracking-[0.5em] uppercase font-black pb-1 leading-relaxed">
-                  Autonomous Procurement POC v4.2.0 • 2026
-                </p>
-                <div className="flex items-center gap-12">
-                  {["Protocol", "Security", "Analytics"].map((item) => (
-                    <span key={item} className="text-xs font-mono text-slate-500 hover:text-[var(--kinetic-teal)] cursor-help transition-all uppercase tracking-[0.2em] font-bold pb-1 block leading-relaxed">
-                      {item}
-                    </span>
-                  ))}
+
+            {/* Platform Footer - Scrolling Marquee */}
+            <footer className="mt-40 pb-6 pt-20 border-t border-white/5 text-center relative z-10 w-full overflow-hidden">
+              <div className="flex animate-scroll-left">
+                {/* First set of content */}
+                <div className="flex items-center justify-center gap-12 px-10 shrink-0">
+                  <p className="text-xs font-mono text-slate-600 tracking-[0.5em] uppercase font-black pb-1 leading-relaxed whitespace-nowrap">
+                    Autonomous Procurement POC v4.2.0 • 2026
+                  </p>
+                  <div className="flex items-center gap-12">
+                    {["Protocol", "Security", "Analytics"].map((item) => (
+                      <span key={item} className="text-xs font-mono text-slate-500 hover:text-[var(--kinetic-teal)] cursor-help transition-all uppercase tracking-[0.2em] font-bold pb-1 leading-relaxed whitespace-nowrap">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                {/* Duplicate for seamless loop */}
+                <div className="flex items-center justify-center gap-12 px-10 shrink-0">
+                  <p className="text-xs font-mono text-slate-600 tracking-[0.5em] uppercase font-black pb-1 leading-relaxed whitespace-nowrap">
+                    Autonomous Procurement POC v4.2.0 • 2026
+                  </p>
+                  <div className="flex items-center gap-12">
+                    {["Protocol", "Security", "Analytics"].map((item) => (
+                      <span key={`${item}-dup`} className="text-xs font-mono text-slate-500 hover:text-[var(--kinetic-teal)] cursor-help transition-all uppercase tracking-[0.2em] font-bold pb-1 leading-relaxed whitespace-nowrap">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </footer>

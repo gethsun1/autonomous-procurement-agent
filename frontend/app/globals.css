@@ -98,6 +98,25 @@ h6 {
   pointer-events: none;
 }
 
+/* Scrolling Animations */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 30s linear infinite;
+}
+
+.animate-scroll-left:hover {
+  animation-play-state: paused;
+}
+
 .glass-card {
   background: var(--bg-surface);
   backdrop-filter: blur(16px);
