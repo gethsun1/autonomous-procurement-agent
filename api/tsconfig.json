@@ -1,0 +1,19 @@
+{
+    "extends": "../backend/tsconfig.json",
+    "compilerOptions": {
+        "outDir": ".vercel/output",
+        "rootDir": ".",
+        "module": "commonjs",
+        "target": "ES2020",
+        "esModuleInterop": true,
+        "skipLibCheck": true
+    },
+    "include": [
+        "**/*.ts",
+        "../backend/src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        ".vercel"
+    ]
+}
