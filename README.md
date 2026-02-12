@@ -1,6 +1,6 @@
 # Autonomous Procurement Agent
 
-![Cover Image](./frontend/public/cover-image.png)
+![Cover Image](./cover-image.png)
 
 > **SKALE x402 Hackathon Submission** | Live on SKALE Calypso Testnet
 
