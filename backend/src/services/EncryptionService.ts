@@ -32,7 +32,7 @@ export class EncryptionService {
         let encrypted = cipher.update(plaintext, "utf8");
         encrypted = Buffer.concat([encrypted, cipher.final()]);
 
-        const tag = cipher.getAuthTag();
+        const tag = (cipher as any).getAuthTag();
 
         return {
             encrypted,
@@ -51,7 +51,7 @@ export class EncryptionService {
             encryptedData.iv
         );
 
-        decipher.setAuthTag(encryptedData.tag);
+        (decipher as any).setAuthTag(encryptedData.tag);
 
         let decrypted = decipher.update(encryptedData.encrypted);
         decrypted = Buffer.concat([decrypted, decipher.final()]);
