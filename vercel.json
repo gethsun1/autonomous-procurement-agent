@@ -1,18 +1,10 @@
+```json
 {
-    "version": 2,
-    "routes": [
+    "rewrites": [
         {
-            "src": "/api/(.*)",
-            "dest": "/api/index.ts"
+            "source": "/api/(.*)",
+            "destination": "/api"
         }
-    ],
-    "env": {
-        "NODE_ENV": "production"
-    },
-    "functions": {
-        "api/index.ts": {
-            "memory": 1024,
-            "maxDuration": 30
-        }
-    }
+    ]
 }
+```
