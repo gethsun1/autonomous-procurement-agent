@@ -240,7 +240,7 @@ export class AgentOrchestrator {
             (vendor.pricePerMonth * workflow.request.durationDays) / 30;
 
         // In production, this would be a real vendor wallet address
-        const vendorAddress = "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0"; // Mock address
+        const vendorAddress = "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0".toLowerCase(); // Mock address (normalize to lowercase)
 
         const txHash = await this.blockchainService.executePayment(
             workflowId,

@@ -151,7 +151,12 @@ export class BlockchainService {
             throw new Error("Contracts not initialized");
         }
 
-        const amountWei = ethers.parseEther(amount.toString());
+        // Scale down payment for demo: divide by 10000 to convert $380 -> 0.038 sFUEL
+        // This allows testing with limited testnet sFUEL balance
+        const scaledAmount = amount / 10000;
+        const amountWei = ethers.parseEther(scaledAmount.toString());
+
+        console.log(`💰 Payment: $${amount} (scaled to ${scaledAmount} sFUEL for demo)`);
 
         const tx = await this.contracts.x402.initiatePayment(
             workflowId,
@@ -198,11 +203,15 @@ export class BlockchainService {
             throw new Error("Contracts not initialized");
         }
 
+        // Scale down amount to match payment scaling
+        const scaledAmount = amount / 10000;
+        const amountWei = ethers.parseEther(scaledAmount.toString());
+
         // Initiate settlement
         const initTx = await this.contracts.ap2.initiateSettlement(
             workflowId,
             paymentTxHash,
-            ethers.parseEther(amount.toString())
+            amountWei
         );
         await initTx.wait();
 
