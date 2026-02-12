@@ -1,0 +1,342 @@
+@import "tailwindcss";
+
+:root {
+  /* Ultra-Vibrant Neo-Cyber Palette */
+  --obsidian: #010203;
+  --charcoal: #05070a;
+  --graphite: #0a0d14;
+  --midnight-slate: #101520;
+
+  /* High-Energy Kinetic Colors */
+  --kinetic-teal: #00ffff;
+  /* Electric Cyan */
+  --electric-violet: #d400ff;
+  /* Neon Purple */
+  --cyber-lime: #a2ff00;
+  /* Radioactive Lime */
+  --neon-pink: #ff0055;
+  /* Laser Pink */
+  --signal-red: #FF3B3B;
+  /* Critical Red */
+  --platinum: #ffffff;
+
+  /* Semantic Variables */
+  --bg-primary: var(--obsidian);
+  --bg-surface: var(--graphite);
+  --accent-primary: var(--kinetic-teal);
+  --accent-security: var(--electric-violet);
+
+  /* High-Contrast Glass Effects */
+  --glass-bg: rgba(5, 7, 10, 0.85);
+  --glass-border: rgba(0, 255, 255, 0.2);
+  --glass-shimmer: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent 45%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--platinum);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  /* Visual grain and texture */
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.06;
+    pointer-events: none;
+    z-index: 1000;
+  }
+}
+
+/* --- Typography --- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  letter-spacing: -0.05rem;
+  color: var(--platinum);
+}
+
+.font-display {
+  font-family: 'Outfit', sans-serif;
+}
+
+.font-mono-system {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* --- Vivid Glassmorphism --- */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 12px 60px -10px rgba(0, 0, 0, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--glass-shimmer);
+  pointer-events: none;
+}
+
+.glass-card {
+  background: var(--bg-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 80px -20px rgba(0, 0, 0, 1);
+  border-radius: 1.75rem;
+  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  border-color: rgba(0, 255, 255, 0.5);
+  box-shadow: 0 40px 100px -25px rgba(0, 0, 0, 1), 0 0 40px rgba(0, 255, 255, 0.2);
+}
+
+/* --- Electric Kinetic Elements --- */
+.gradient-text-kinetic {
+  background: linear-gradient(135deg, var(--kinetic-teal) 0%, #00ff8c 50%, var(--cyber-lime) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-text 3s linear infinite;
+}
+
+@keyframes shimmer-text {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* --- High-Voltage Buttons --- */
+.btn-primary {
+  width: 100%;
+  padding: 1.4rem 2.5rem;
+  border-radius: 1.25rem;
+  font-weight: 900;
+  color: var(--obsidian);
+  background: linear-gradient(135deg, var(--kinetic-teal) 0%, #00ff8c 100%);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 8px 0 0 #008f9c, 0 15px 40px rgba(0, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 1rem;
+}
+
+.btn-primary:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 0 0 #008f9c, 0 30px 60px rgba(0, 255, 255, 0.5);
+}
+
+.btn-primary:active {
+  transform: translateY(6px);
+  box-shadow: 0 0px 0 0 #008f9c;
+}
+
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  transition: 0.7s;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+/* --- Cyber Inputs --- */
+.input-group {
+  position: relative;
+  margin-bottom: 2.5rem;
+}
+
+.input-field {
+  width: 100%;
+  background: rgba(0, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.25rem;
+  padding: 2.2rem 1.5rem 1rem 1.5rem;
+  color: var(--platinum);
+  outline: none;
+  transition: all 0.5s ease;
+  font-size: 1.1rem;
+}
+
+.input-field:focus {
+  background: rgba(0, 255, 255, 0.12);
+  border-color: var(--kinetic-teal);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+}
+
+.input-field-encrypted {
+  width: 100%;
+  background: rgba(212, 0, 255, 0.05);
+  border: 1px solid rgba(212, 0, 255, 0.4);
+  border-radius: 1.25rem;
+  padding: 2.2rem 1.5rem 1rem 1.5rem;
+  color: var(--platinum);
+  outline: none;
+  transition: all 0.5s ease;
+  font-size: 1.1rem;
+}
+
+.input-field-encrypted:focus {
+  background: rgba(212, 0, 255, 0.15);
+  border-color: var(--electric-violet);
+  box-shadow: 0 0 40px rgba(212, 0, 255, 0.4);
+}
+
+.input-label {
+  position: absolute;
+  left: 1.5rem;
+  top: 1.5rem;
+  color: #94a3b8;
+  font-size: 1rem;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.input-field:focus~.input-label,
+.input-field:not(:placeholder-shown)~.input-label,
+.input-field-encrypted:focus~.input-label,
+.input-field-encrypted:not(:placeholder-shown)~.input-label {
+  top: 0.6rem;
+  left: 1.2rem;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--kinetic-teal);
+}
+
+.input-field-encrypted:focus~.input-label,
+.input-field-encrypted:not(:placeholder-shown)~.input-label {
+  color: var(--electric-violet);
+}
+
+.animated-border-wrapper {
+  position: relative;
+  padding: 3px;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 0 70px -10px rgba(0, 255, 255, 0.3);
+}
+
+.animated-border-wrapper::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg,
+      transparent 0deg,
+      var(--kinetic-teal) 60deg,
+      transparent 120deg,
+      transparent 180deg,
+      var(--electric-violet) 240deg,
+      transparent 300deg,
+      transparent 360deg);
+  animation: rotate-conic 8s linear infinite;
+}
+
+@keyframes rotate-conic {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animated-border-content {
+  position: relative;
+  z-index: 1;
+  background: var(--obsidian);
+  border-radius: 27px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* --- Vivid Scrollbar --- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--obsidian);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--midnight-slate);
+  border: 2px solid var(--obsidian);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--kinetic-teal);
+  box-shadow: 0 0 10px var(--kinetic-teal);
+}
+
+/* --- Dynamic Animation Utilities --- */
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-glow {
+  animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.6));
+  }
+
+  to {
+    filter: drop-shadow(0 0 50px rgba(0, 255, 255, 0.9));
+  }
+}
