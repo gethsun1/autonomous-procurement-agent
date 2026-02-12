@@ -1,4 +1,9 @@
 {
+    "buildCommand": "cd backend && npm install && npm run build",
+    "outputDirectory": "backend/dist",
+    "installCommand": "npm install",
+    "devCommand": "npm run dev --workspace=backend",
+    "framework": null,
     "rewrites": [
         {
             "source": "/api/(.*)",
