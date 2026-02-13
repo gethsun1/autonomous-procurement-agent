@@ -225,20 +225,6 @@ app.get("/api/procurement/:workflowId/status", async (req, res) => {
         });
     }
 });
-        }
-
-        res.json({
-            success: true,
-            workflow,
-        });
-    } catch (error) {
-        console.error("Error getting workflow status:", error);
-        res.status(500).json({
-            success: false,
-            error: error instanceof Error ? error.message : "Unknown error",
-        });
-    }
-});
 
 app.get("/api/procurement/:workflowId/evaluation", async (req, res) => {
     try {
