@@ -84,7 +84,7 @@ export default function InsufficientFundsAlert({ error, walletAddress }: Props) 
                         <span className="text-xs font-mono text-gray-500 uppercase tracking-wider">
                             Deployer Address
                         </span>
-                        <span className="text-xs font-mono text-violet-400">SKALE CALYPSO</span>
+                        <span className="text-xs font-mono text-violet-400">SKALE BASE SEPOLIA</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <code className="flex-1 text-sm font-mono text-cyan-300 bg-cyan-500/5 px-3 py-2 rounded-lg border border-cyan-500/20">
@@ -123,7 +123,7 @@ export default function InsufficientFundsAlert({ error, walletAddress }: Props) 
                         <div>
                             <p className="text-sm font-medium text-white mb-1">Request Tokens</p>
                             <p className="text-xs text-gray-400 font-light">
-                                Select Calypso Testnet and paste your deployer address
+                                Select Base Sepolia Testnet and paste your deployer address
                             </p>
                         </div>
                     </div>

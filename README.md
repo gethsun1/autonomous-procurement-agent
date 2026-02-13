@@ -2,11 +2,11 @@
 
 ![Cover Image](./cover-image.png)
 
-> **SKALE x402 Hackathon Submission** | Live on SKALE Calypso Testnet
+> **SKALE x402 Hackathon Submission** | Live on SKALE Base Sepolia Testnet
 
 A fully autonomous procurement system combining AI decision-making (Google Gemini), privacy-preserving execution (SKALE BITE), and on-chain settlement (x402 + AP2).
 
-[![SKALE Network](https://img.shields.io/badge/SKALE-Calypso_Testnet-00d1c1?style=for-the-badge)](https://skale.space/)
+[![SKALE Network](https://img.shields.io/badge/SKALE-Base_Sepolia_Testnet-00d1c1?style=for-the-badge)](https://skale.space/)
 [![x402 Protocol](https://img.shields.io/badge/x402-Payment_Protocol-00ffff?style=for-the-badge)](https://skale.space/)
 [![Google Gemini](https://img.shields.io/badge/Google-Gemini_AI-4285f4?style=for-the-badge)](https://ai.google.dev/)
 
@@ -14,7 +14,7 @@ A fully autonomous procurement system combining AI decision-making (Google Gemin
 
 ## 🚀 Deployed Smart Contracts
 
-All contracts are live on **SKALE Calypso Testnet**:
+All contracts are live on **SKALE Base Sepolia Testnet**:
 
 | Contract | Address | Purpose |
 |----------|---------|---------|
@@ -24,9 +24,9 @@ All contracts are live on **SKALE Calypso Testnet**:
 | **EncryptionHelper** | [`0xEC85cC46c6C514a6e05361f682c884d30d0cc9D3`](https://giant-half-dual-testnet.explorer.testnet.skalenodes.com/address/0xEC85cC46c6C514a6e05361f682c884d30d0cc9D3) | BITE encryption utilities |
 
 **Network Details:**
-- Chain ID: `974399131`
-- RPC URL: `https://testnet.skalenodes.com/v1/giant-half-dual-testnet`
-- Explorer: [SKALE Calypso Explorer](https://giant-half-dual-testnet.explorer.testnet.skalenodes.com/)
+- Chain ID: `324705682`
+- RPC URL: `https://base-sepolia-testnet.skalenodes.com/v1/jubilant-horrible-ancha`
+- Explorer: [SKALE Base Sepolia Explorer](https://base-sepolia-testnet.explorer.testnet.skalenodes.com/)
 
 ---
 
