@@ -280,4 +280,41 @@ export class BlockchainService {
             throw error;
         }
     }
-}
+
+    /**
+     * Fetch workflow data from blockchain (for serverless environments)
+     */
+    async getWorkflowFromBlockchain(workflowId: number) {
+        if (!this.contracts.workflow) {
+            throw new Error("Contracts not initialized");
+        }
+
+        try {
+            const workflow = await this.contracts.workflow.getWorkflow(workflowId);
+            
+            // Convert blockchain state to application state
+            const stateMap: { [key: number]: string } = {
+                0: "Initialized",
+                1: "Discovery",
+                2: "Evaluation",
+                3: "Selection",
+                4: "PaymentPending",
+                5: "Settled",
+                6: "Completed"
+            };
+
+            return {
+                workflowId: Number(workflow.id),
+                state: stateMap[Number(workflow.state)] || "Initialized",
+                procurementBrief: workflow.procurementBrief,
+                selectedVendorId: workflow.selectedVendorId,
+                paymentAmount: workflow.paymentAmount ? ethers.formatEther(workflow.paymentAmount) : null,
+                paymentTxHash: workflow.paymentTxHash,
+                createdAt: Number(workflow.createdAt),
+                completedAt: Number(workflow.completedAt)
+            };
+        } catch (error) {
+            console.error(`Error fetching workflow ${workflowId} from blockchain:`, error);
+            return null;
+        }
+    }

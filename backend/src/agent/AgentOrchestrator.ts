@@ -318,3 +318,9 @@ export class AgentOrchestrator {
         }
     }
 }
+    /**
+     * Get blockchain service (for serverless state fetching)
+     */
+    getBlockchainService(): BlockchainService {
+        return this.blockchainService;
+    }
