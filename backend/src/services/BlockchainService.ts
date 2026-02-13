@@ -317,4 +317,4 @@ export class BlockchainService {
             console.error(`Error fetching workflow ${workflowId} from blockchain:`, error);
             return null;
         }
-    }
+    }}
