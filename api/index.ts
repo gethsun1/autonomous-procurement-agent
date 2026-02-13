@@ -25,9 +25,12 @@ app.use(cors({
     origin: [
         'http://localhost:3000',
         'https://autonomous-procurement-agent.vercel.app',
-        'https://*.vercel.app'
+        'https://autonomous-procurement-agent-git-main-gethsun1s-projects.vercel.app',
+        /https:\/\/.*\.vercel\.app$/
     ],
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 
