@@ -26,7 +26,7 @@ All contracts are live on **SKALE Base Sepolia Testnet**:
 **Network Details:**
 - Chain ID: `324705682`
 - RPC URL: `https://base-sepolia-testnet.skalenodes.com/v1/jubilant-horrible-ancha`
-- Explorer: [SKALE Base Sepolia Explorer](https://base-sepolia-testnet.explorer.testnet.skalenodes.com/)
+- Explorer: [SKALE Base Sepolia Explorer](https://base-sepolia-testnet-explorer.skalenodes.com/address/0x075823CffDD46A492A971Cf98D57FB35A5912Ec9)
 
 ---
 
