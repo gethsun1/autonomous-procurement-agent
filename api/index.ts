@@ -182,13 +182,49 @@ app.get("/api/procurement/:workflowId/status", async (req, res) => {
     try {
         const workflowId = parseInt(req.params.workflowId);
         const orch = await getOrchestrator();
-        const workflow = orch.getWorkflowStatus(workflowId);
+        
+        // First try in-memory storage (same request cycle)
+        let workflow = orch.getWorkflowStatus(workflowId);
 
+        // If not in memory, fetch from blockchain (serverless fallback)
         if (!workflow) {
-            return res.status(404).json({
-                success: false,
-                error: "Workflow not found",
-            });
+            const blockchainWorkflow = await orch.getBlockchainService().getWorkflowFromBlockchain(workflowId);
+            
+            if (!blockchainWorkflow) {
+                return res.status(404).json({
+                    success: false,
+                    error: "Workflow not found",
+                });
+            }
+
+            // Convert blockchain format to workflow format
+            workflow = {
+                workflowId: blockchainWorkflow.workflowId,
+                state: blockchainWorkflow.state as any,
+                request: {
+                    brief: blockchainWorkflow.procurementBrief,
+                    maxBudget: 0, // Not stored on-chain
+                    minQualityScore: 0,
+                    preferredSLA: 0,
+                    durationDays: 0
+                },
+                selectedVendorId: blockchainWorkflow.selectedVendorId,
+                paymentTxHash: blockchainWorkflow.paymentTxHash
+            };
+        }
+
+        res.json({
+            success: true,
+            workflow,
+        });
+    } catch (error) {
+        console.error("Error getting workflow status:", error);
+        res.status(500).json({
+            success: false,
+            error: error instanceof Error ? error.message : "Unknown error",
+        });
+    }
+});
         }
 
         res.json({
