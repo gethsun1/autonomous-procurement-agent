@@ -4,8 +4,5 @@
             "source": "/api/(.*)",
             "destination": "/api"
         }
-    ],
-    "buildCommand": "echo 'Skipping build for API-only deployment'",
-    "outputDirectory": "api",
-    "installCommand": "npm install"
+    ]
 }
