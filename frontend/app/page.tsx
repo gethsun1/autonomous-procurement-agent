@@ -71,7 +71,7 @@ export default function Home() {
 
   const fetchEvaluation = async (id: number) => {
     try {
-      const response = await fetch(`${API_URL}/procurement/${id}/evaluation`);
+      const response = await fetch(`${API_URL}/api/procurement/${id}/evaluation`);
       const data = await response.json();
 
       if (data.success && workflow) {
@@ -89,7 +89,7 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/procurement/request`, {
+      const response = await fetch(`${API_URL}/api/procurement/request`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
