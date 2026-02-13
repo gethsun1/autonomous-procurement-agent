@@ -39,7 +39,7 @@ export default function Home() {
     const interval = setInterval(async () => {
       try {
         const response = await fetch(
-          `${API_URL}/procurement/${workflowId}/status`
+          `${API_URL}/api/procurement/${workflowId}/status`
         );
         const data = await response.json();
 
@@ -109,7 +109,7 @@ export default function Home() {
         request: formData,
       });
 
-      const executeResponse = await fetch(`${API_URL}/procurement/${newWorkflowId}/execute`, {
+      const executeResponse = await fetch(`${API_URL}/api/procurement/${newWorkflowId}/execute`, {
         method: "POST",
       });
 
