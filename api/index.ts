@@ -69,13 +69,13 @@ async function getOrchestrator(): Promise<AgentOrchestrator> {
     // Load contract addresses from environment
     try {
         const contracts = {
-            procurementWorkflow: process.env.PROCUREMENT_WORKFLOW_ADDRESS || "",
-            x402: process.env.X402_ADDRESS || "",
-            ap2: process.env.AP2_ADDRESS || "",
-            encryptionHelper: process.env.ENCRYPTION_HELPER_ADDRESS || ""
+            ProcurementWorkflow: process.env.PROCUREMENT_WORKFLOW_ADDRESS || "",
+            MockX402: process.env.X402_ADDRESS || "",
+            MockAP2: process.env.AP2_ADDRESS || "",
+            EncryptionHelper: process.env.ENCRYPTION_HELPER_ADDRESS || ""
         };
 
-        if (contracts.procurementWorkflow && contracts.x402 && contracts.ap2) {
+        if (contracts.ProcurementWorkflow && contracts.MockX402 && contracts.MockAP2) {
             await blockchainService.initializeContracts(contracts);
             console.log("✅ Blockchain service initialized");
         } else {
