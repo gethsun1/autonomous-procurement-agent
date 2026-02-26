@@ -25,11 +25,13 @@ interface Props {
     evaluation?: {
         rankedVendors: VendorScore[];
         recommendation: string;
+        evaluationMode?: "LIVE" | "MOCK";
     };
     selectedVendorId?: string;
+    evaluationMode?: "LIVE" | "MOCK";
 }
 
-export default function VendorEvaluation({ evaluation, selectedVendorId }: Props) {
+export default function VendorEvaluation({ evaluation, selectedVendorId, evaluationMode }: Props) {
     if (!evaluation) {
         return (
             <motion.div
@@ -48,10 +50,36 @@ export default function VendorEvaluation({ evaluation, selectedVendorId }: Props
         );
     }
 
+    // Resolve evaluation mode from either source
+    const mode = evaluationMode || evaluation.evaluationMode || "LIVE";
+    const isMock = mode === "MOCK";
+
     const { rankedVendors, recommendation } = evaluation;
 
     return (
         <div className="space-y-10">
+            {/* MOCK evaluation warning banner */}
+            {isMock && (
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-4 px-6 py-4 rounded-2xl border border-yellow-500/50 bg-yellow-500/10 text-yellow-400"
+                >
+                    <span className="text-xl">⚠️</span>
+                    <div>
+                        <div className="font-black text-sm uppercase tracking-widest font-mono">
+                            🔴 MOCK EVALUATION ACTIVE
+                        </div>
+                        <div className="text-xs text-yellow-400/70 mt-0.5">
+                            Gemini API unavailable — static fallback data used. Results are not AI-generated.
+                        </div>
+                    </div>
+                    <span className="ml-auto text-xs font-mono bg-yellow-500/20 px-3 py-1 rounded-full border border-yellow-500/30">
+                        evaluationMode: MOCK
+                    </span>
+                </motion.div>
+            )}
+
             {/* AI Recommendation Spotlight */}
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -83,8 +111,11 @@ export default function VendorEvaluation({ evaluation, selectedVendorId }: Props
                     <h2 className="text-3xl font-black font-display text-white tracking-tighter uppercase">
                         Market Evaluation
                     </h2>
-                    <div className="text-xs font-mono text-[var(--kinetic-teal)] tracking-widest bg-white/5 px-4 py-1.5 rounded-full border border-[var(--kinetic-teal)]/20 font-bold">
-                        ALGORITHM: GEMINI_FLASH_1.5_PRO
+                    <div className={`text-xs font-mono tracking-widest px-4 py-1.5 rounded-full border font-bold ${isMock
+                            ? "text-yellow-400 bg-yellow-500/10 border-yellow-500/30"
+                            : "text-[var(--kinetic-teal)] bg-white/5 border-[var(--kinetic-teal)]/20"
+                        }`}>
+                        {isMock ? "🔴 MOCK_EVALUATION" : "✅ ALGORITHM: GEMINI_FLASH_1.5_PRO"}
                     </div>
                 </div>
 

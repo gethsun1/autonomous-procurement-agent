@@ -12,6 +12,21 @@ import * as path from "path";
 
 dotenv.config({ path: "../.env" });
 
+// ─── Hard-fail on missing secrets ─────────────────────────────────────────────
+// The system will not run in a degraded/fallback mode. Every required secret
+// must be present in the environment or the process crashes with a clear message.
+function requireEnv(name: string): string {
+    const value = process.env[name];
+    if (!value || value.trim() === "") {
+        throw new Error(
+            `\n❌ REQUIRED ENVIRONMENT VARIABLE MISSING: ${name}\n` +
+            `   Copy .env.example to .env and set all required values.\n` +
+            `   The system will not start without all secrets configured.\n`
+        );
+    }
+    return value;
+}
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -25,27 +40,27 @@ let orchestrator: AgentOrchestrator;
 async function initializeServices() {
     console.log("🔧 Initializing services...");
 
-    const geminiApiKey = process.env.GEMINI_API_KEY;
-    if (!geminiApiKey) {
-        throw new Error("GEMINI_API_KEY not found in environment");
-    }
+    // All three secrets are required — hard crash if missing
+    const geminiApiKey = requireEnv("GEMINI_API_KEY");
+    const privateKey = requireEnv("DEPLOYER_PRIVATE_KEY");
+    const encKey = requireEnv("ENCRYPTION_KEY");
 
     const rpcUrl = process.env.SKALE_RPC_URL;
-    const privateKey = process.env.DEPLOYER_PRIVATE_KEY;
-
-    if (!rpcUrl || !privateKey) {
-        console.warn("⚠️ Blockchain credentials not configured. Running in mock mode.");
+    if (!rpcUrl) {
+        throw new Error(
+            "SKALE_RPC_URL is not set. Set it to the SKALE Base Sepolia RPC endpoint."
+        );
     }
+
+    // Payment scale divisor — transparent, from env, default 1M for testnet demo
+    const paymentScaleDivisor = parseInt(process.env.PAYMENT_SCALE_DIVISOR || "1000000", 10);
+    console.log(`💱 Payment scale divisor: ${paymentScaleDivisor} (1 = production amounts)`);
 
     const geminiEvaluator = new GeminiEvaluator(geminiApiKey);
     const decisionValidator = new DecisionValidator();
-    const encryptionService = new EncryptionService();
+    const encryptionService = new EncryptionService(encKey);
 
-    // Initialize blockchain service if credentials available
-    const blockchainService = new BlockchainService(
-        rpcUrl || "http://localhost:8545",
-        privateKey || "0x0000000000000000000000000000000000000000000000000000000000000001"
-    );
+    const blockchainService = new BlockchainService(rpcUrl, privateKey, paymentScaleDivisor);
 
     // Load contract addresses from deployment
     try {
@@ -59,7 +74,7 @@ async function initializeServices() {
             await blockchainService.initializeContracts(deployment.contracts);
             console.log("✅ Blockchain service initialized");
         } else {
-            console.warn("⚠️ No deployment file found. Run contract deployment first.");
+            console.warn("⚠️ No deployment file found. Run: cd contracts && npm run deploy");
         }
     } catch (error) {
         console.error("Failed to initialize blockchain service:", error);
@@ -76,11 +91,13 @@ async function initializeServices() {
 }
 
 // Routes
+const apiRouter = express.Router();
+app.use("/api", apiRouter);
 
 /**
  * Get all available vendors
  */
-app.get("/vendors", (req, res) => {
+apiRouter.get("/vendors", (req, res) => {
     const vendors = getAllVendors();
     res.json({ success: true, vendors });
 });
@@ -88,7 +105,7 @@ app.get("/vendors", (req, res) => {
 /**
  * Get vendor by ID
  */
-app.get("/vendors/:id", (req, res) => {
+apiRouter.get("/vendors/:id", (req, res) => {
     const vendor = getVendorById(req.params.id);
 
     if (!vendor) {
@@ -101,7 +118,7 @@ app.get("/vendors/:id", (req, res) => {
 /**
  * Submit a procurement request
  */
-app.post("/procurement/request", async (req, res) => {
+apiRouter.post("/procurement/request", async (req, res) => {
     try {
         const request: ProcurementRequest = req.body;
 
@@ -137,7 +154,7 @@ app.post("/procurement/request", async (req, res) => {
 /**
  * Execute autonomous procurement flow
  */
-app.post("/procurement/:workflowId/execute", async (req, res) => {
+apiRouter.post("/procurement/:workflowId/execute", async (req, res) => {
     try {
         const workflowId = parseInt(req.params.workflowId);
 
@@ -161,23 +178,48 @@ app.post("/procurement/:workflowId/execute", async (req, res) => {
 });
 
 /**
- * Get workflow status
+ * Get workflow status — chain is authoritative source of truth (Phase 4)
  */
-app.get("/procurement/:workflowId/status", (req, res) => {
+apiRouter.get("/procurement/:workflowId/status", async (req, res) => {
     try {
         const workflowId = parseInt(req.params.workflowId);
-        const workflow = orchestrator.getWorkflowStatus(workflowId);
 
-        if (!workflow) {
+        // 1. Try to get authoritative state from blockchain
+        const blockchainService = orchestrator.getBlockchainService();
+        const chainState = await blockchainService.getFullWorkflowState(workflowId);
+
+        // 2. Get in-memory data (evaluation object — not storable on-chain)
+        const memoryData = orchestrator.getWorkflowStatus(workflowId);
+
+        if (!chainState && !memoryData) {
             return res.status(404).json({
                 success: false,
                 error: "Workflow not found",
             });
         }
 
+        // 3. Merge: chain state is authoritative for state/hashes; memory holds evaluation
+        const merged = {
+            workflowId,
+            // Chain-authoritative fields
+            state: chainState?.state ?? memoryData?.state ?? "Initialized",
+            paymentTxHash: chainState?.paymentTxHash ?? memoryData?.paymentTxHash,
+            paymentExecuted: chainState?.paymentExecuted ?? false,
+            settlementFinalized: chainState?.settlementFinalized ?? false,
+            paymentScaleDivisor: chainState?.paymentScaleDivisor ?? 1,
+            // In-memory fields (AI evaluation, request params)
+            request: memoryData?.request,
+            evaluation: memoryData?.evaluation,
+            evaluationMode: memoryData?.evaluationMode ?? memoryData?.evaluation?.evaluationMode,
+            selectedVendorId: chainState?.selectedVendorId || memoryData?.selectedVendorId,
+            error: memoryData?.error,
+            // Source of truth indicator
+            stateSource: chainState ? "chain" : "memory",
+        };
+
         res.json({
             success: true,
-            workflow,
+            workflow: merged,
         });
     } catch (error) {
         console.error("Error getting workflow status:", error);
@@ -191,7 +233,7 @@ app.get("/procurement/:workflowId/status", (req, res) => {
 /**
  * Get evaluation results
  */
-app.get("/procurement/:workflowId/evaluation", (req, res) => {
+apiRouter.get("/procurement/:workflowId/evaluation", (req, res) => {
     try {
         const workflowId = parseInt(req.params.workflowId);
         const workflow = orchestrator.getWorkflowStatus(workflowId);

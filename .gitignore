@@ -12,16 +12,15 @@ dist/
 .next/
 out/
 
-# Environment
+# Environment — keep .env.example but block everything else
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
 
 # Logs
 logs
 *.log
+debug_log.txt
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -43,6 +42,7 @@ cache/
 artifacts/
 typechain-types/
 deployments/
+!contracts/deployments/latest.json
 
 # Misc
 .turbo

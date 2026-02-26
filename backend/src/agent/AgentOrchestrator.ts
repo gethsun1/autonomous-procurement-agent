@@ -3,6 +3,7 @@ import { DecisionValidator, DecisionConstraints } from "./DecisionValidator";
 import { BlockchainService } from "../services/BlockchainService";
 import { EncryptionService } from "../services/EncryptionService";
 import { getAllVendors, getVendorById } from "../data/VendorData";
+import * as fs from "fs";
 
 export enum AgentState {
     Idle = "Idle",
@@ -29,6 +30,7 @@ export interface WorkflowData {
     state: AgentState;
     request: ProcurementRequest;
     evaluation?: EvaluationResult;
+    evaluationMode?: "LIVE" | "MOCK";
     selectedVendorId?: string;
     paymentTxHash?: string;
     error?: string;
@@ -94,33 +96,60 @@ export class AgentOrchestrator {
      * Execute the autonomous procurement flow
      */
     async executeAutonomousFlow(workflowId: number): Promise<void> {
+        const log = (msg: string) => {
+            const timestamp = new Date().toISOString();
+            const logMsg = `[${timestamp}] [Workflow ${workflowId}] ${msg}\n`;
+            console.log(msg);
+            try {
+                // Absolute path — safe in both local and serverless environments
+                const logPath = require("path").join(__dirname, "../../debug_log.txt");
+                fs.appendFileSync(logPath, logMsg);
+            } catch (e) {
+                console.error("Failed to write to debug log", e);
+            }
+        };
+
         try {
             const workflow = this.workflows.get(workflowId);
             if (!workflow) {
                 throw new Error(`Workflow ${workflowId} not found`);
             }
 
+            log("Starting execution");
+
             // Phase 1: Discovery
+            log("Phase 1: Discovery start");
             await this.discoveryPhase(workflowId);
+            log("Phase 1: Discovery complete");
 
             // Phase 2: Evaluation
+            log("Phase 2: Evaluation start");
             await this.evaluationPhase(workflowId);
+            log("Phase 2: Evaluation complete");
 
             // Phase 3: Selection
+            log("Phase 3: Selection start");
             await this.selectionPhase(workflowId);
+            log("Phase 3: Selection complete");
 
             // Phase 4: Payment
+            log("Phase 4: Payment start");
             await this.paymentPhase(workflowId);
+            log("Phase 4: Payment complete");
 
             // Phase 5: Settlement
+            log("Phase 5: Settlement start");
             await this.settlementPhase(workflowId);
+            log("Phase 5: Settlement complete");
 
             // Phase 6: Completion
+            log("Phase 6: Completion start");
             await this.completionPhase(workflowId);
+            log("Phase 6: Completion complete");
 
-            console.log(`🎉 Workflow ${workflowId} completed successfully`);
+            log("Workflow completed successfully");
         } catch (error) {
-            console.error(`❌ Workflow ${workflowId} failed:`, error);
+            log(`Workflow failed: ${error}`);
             this.updateWorkflowState(workflowId, AgentState.Error, {
                 error: error instanceof Error ? error.message : String(error),
             });
@@ -191,10 +220,12 @@ export class AgentOrchestrator {
 
         this.updateWorkflowState(workflowId, AgentState.Evaluation, {
             evaluation,
+            evaluationMode: evaluation.evaluationMode,
             selectedVendorId: validation.selectedVendor!.vendorId,
         });
 
-        console.log(`✅ Selected vendor: ${validation.selectedVendor!.vendorName}`);
+        const modeTag = evaluation.evaluationMode === "MOCK" ? " [⚠️ MOCK MODE]" : " [✅ LIVE]";
+        console.log(`✅ Selected vendor: ${validation.selectedVendor!.vendorName}${modeTag}`);
     }
 
     /**
@@ -239,8 +270,13 @@ export class AgentOrchestrator {
         const paymentAmount =
             (vendor.pricePerMonth * workflow.request.durationDays) / 30;
 
-        // In production, this would be a real vendor wallet address
-        const vendorAddress = "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0".toLowerCase(); // Mock address (normalize to lowercase)
+        // Use the vendor's actual wallet address — no hardcoded fallback
+        if (!vendor.walletAddress) {
+            throw new Error(`Vendor ${vendor.id} has no walletAddress configured in VendorData`);
+        }
+        const vendorAddress = vendor.walletAddress;
+
+        console.log(`💰 Sending payment to vendor wallet: ${vendorAddress}`);
 
         const txHash = await this.blockchainService.executePayment(
             workflowId,

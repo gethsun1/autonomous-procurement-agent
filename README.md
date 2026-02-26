@@ -4,7 +4,7 @@
 
 > **SKALE x402 Hackathon Submission** | Live on SKALE Base Sepolia Testnet
 
-A fully autonomous procurement system combining AI decision-making (Google Gemini), privacy-preserving execution (SKALE BITE), and on-chain settlement (x402 + AP2).
+A fully autonomous procurement system combining AI decision-making (Google Gemini), privacy-preserving execution (SKALE BITE), and on-chain settlement (x402 + AP2). Built on SKALE.
 
 [![SKALE Network](https://img.shields.io/badge/SKALE-Base_Sepolia_Testnet-00d1c1?style=for-the-badge)](https://skale.space/)
 [![x402 Protocol](https://img.shields.io/badge/x402-Payment_Protocol-00ffff?style=for-the-badge)](https://skale.space/)
@@ -18,15 +18,71 @@ All contracts are live on **SKALE Base Sepolia Testnet**:
 
 | Contract | Address | Purpose |
 |----------|---------|---------|
-| **ProcurementWorkflow** | [`0x565435bAf0C6A9E06BE4e7F00fE08C95d36F247b`](https://giant-half-dual-testnet.explorer.testnet.skalenodes.com/address/0x565435bAf0C6A9E06BE4e7F00fE08C95d36F247b) | ERC-8004 workflow state machine |
-| **MockX402** | [`0x3905052fB9d1502B246442945Eb1DC9573Be4708`](https://giant-half-dual-testnet.explorer.testnet.skalenodes.com/address/0x3905052fB9d1502B246442945Eb1DC9573Be4708) | x402 payment protocol implementation |
-| **MockAP2** | [`0xf6Cd6D7Ee5f2F879A872f559Ef8Db39d73a69f8e`](https://giant-half-dual-testnet.explorer.testnet.skalenodes.com/address/0xf6Cd6D7Ee5f2F879A872f559Ef8Db39d73a69f8e) | AP2 settlement finality |
-| **EncryptionHelper** | [`0xEC85cC46c6C514a6e05361f682c884d30d0cc9D3`](https://giant-half-dual-testnet.explorer.testnet.skalenodes.com/address/0xEC85cC46c6C514a6e05361f682c884d30d0cc9D3) | BITE encryption utilities |
+| **ProcurementWorkflow** | *(redeploy — see addresses in `contracts/deployments/latest.json`)* | ERC-8004 compliant workflow state machine |
+| **X402Escrow** | *(redeploy — replaces MockX402)* | Hardened x402 payment escrow w/ ReentrancyGuard |
+| **AP2Settlement** | *(redeploy — replaces MockAP2)* | Verifiable settlement w/ on-chain payment proof |
+| **EncryptionHelper** | *(redeploy — access-controlled reveal)* | BITE encryption utilities |
+| **ERC8004Registry** | *(new — deployed with agent registration)* | On-chain ERC-8004 agent registry |
 
 **Network Details:**
 - Chain ID: `324705682`
 - RPC URL: `https://base-sepolia-testnet.skalenodes.com/v1/jubilant-horrible-ancha`
 - Explorer: [SKALE Base Sepolia Explorer](https://base-sepolia-testnet-explorer.skalenodes.com/address/0x075823CffDD46A492A971Cf98D57FB35A5912Ec9)
+
+---
+
+## ⛓️ Built on SKALE
+
+**Network:** SKALE Base Sepolia  
+**ERC-8004 Agent Address:** *(see `contracts/deployments/latest.json` after deploy)*  
+**Local Registry Address:** *(see `contracts/deployments/latest.json` after deploy)*  
+**Registration Tx Hash:** *(populated by `npm run deploy`)*  
+**Explorer:** [base-sepolia-testnet-explorer.skalenodes.com](https://base-sepolia-testnet-explorer.skalenodes.com/)
+
+### Canonical ERC-8004 Registries (SKALE Base Sepolia)
+
+| Registry | Address |
+|----------|---------|
+| **IdentityRegistry** | [`0x8004A818BFB912233c491871b3d84c89A494BD9e`](https://base-sepolia-testnet-explorer.skalenodes.com/address/0x8004A818BFB912233c491871b3d84c89A494BD9e) |
+| **ReputationRegistry** | [`0x8004B663056A597Dffe9eCcC1965A193B7388713`](https://base-sepolia-testnet-explorer.skalenodes.com/address/0x8004B663056A597Dffe9eCcC1965A193B7388713) |
+
+> **Note:** These are the canonical on-chain registries from [erc-8004/erc-8004-contracts](https://github.com/erc-8004/erc-8004-contracts) PR #56 ("Add SKALE Base Deployment" by TheGreatAxios). Our `ProcurementWorkflow` exposes `IDENTITY_REGISTRY` and `REPUTATION_REGISTRY` as public constants pointing to these addresses.
+
+### On-Chain Self-Validation
+
+The `ProcurementWorkflow` exposes a `validateRegistry(address registry)` view function that frontends and indexers can call to verify registration without external scripts:
+
+```solidity
+// Returns true if this agent is registered in the given registry
+function validateRegistry(address registry) external view returns (bool valid)
+```
+
+Run the extended verification script after deploy:
+```bash
+npx hardhat run contracts/scripts/verifyErc8004Registration.ts --network skale
+```
+
+### GitHub Repository Metadata
+
+Ensure the following GitHub topics are set on this repository for ecosystem discoverability:
+
+| Required Topic | Status |
+|---------------|--------|
+| `skale` | ✅ Add if missing |
+| `skale-network` | ✅ Add if missing |
+| `skale-base` | ✅ Add if missing |
+| `erc-8004` | ✅ Add if missing |
+| `ai-agents` | ✅ Add if missing |
+| `autonomous-agent` | ✅ Add if missing |
+| `x402` | ✅ Add if missing |
+
+To update: **Settings → Topics** on GitHub, or use the GitHub API:
+```bash
+curl -X PUT https://api.github.com/repos/gethsun1/autonomous-procurement-agent/topics \
+  -H "Authorization: token YOUR_GITHUB_TOKEN" \
+  -H "Accept: application/vnd.github.mercy-preview+json" \
+  -d '{"names":["skale","skale-network","skale-base","erc-8004","ai-agents","autonomous-agent","x402","blockchain","web3","solidity"]}'
+```
 
 ---
 
@@ -266,7 +322,7 @@ nano .env
 GEMINI_API_KEY=your_api_key_here
 
 # SKALE Network (pre-configured for testnet)
-SKALE_RPC_URL=https://testnet.skalenodes.com/v1/giant-half-dual-testnet
+SKALE_RPC_URL=https://base-sepolia-testnet.skalenodes.com/v1/jubilant-horrible-ancha
 DEPLOYER_PRIVATE_KEY=your_private_key_here
 
 # Contract Addresses (already deployed)

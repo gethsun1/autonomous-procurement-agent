@@ -1,0 +1,28 @@
+{
+    "name": "Autonomous Procurement Agent",
+    "description": "Deterministic constrained AI payment agent built on SKALE",
+    "version": "1.0",
+    "chain": "SKALE Base Sepolia",
+    "chainId": "324705682",
+    "agentType": "procurement",
+    "repository": "https://github.com/gethsun1/autonomous-procurement-agent",
+    "capabilities": [
+        "vendor-discovery",
+        "ai-evaluation",
+        "escrow-payment",
+        "settlement"
+    ],
+    "contracts": {
+        "ProcurementWorkflow": "see contracts/deployments/latest.json",
+        "X402Escrow": "see contracts/deployments/latest.json",
+        "AP2Settlement": "see contracts/deployments/latest.json",
+        "EncryptionHelper": "see contracts/deployments/latest.json",
+        "ERC8004Registry": "see contracts/deployments/latest.json"
+    },
+    "erc8004": {
+        "canonicalIdentityRegistry": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
+        "canonicalReputationRegistry": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
+        "localRegistryType": "ERC8004Registry",
+        "registrationStatus": "see contracts/deployments/latest.json for tx hash"
+    }
+}

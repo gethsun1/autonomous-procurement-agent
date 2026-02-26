@@ -15,8 +15,15 @@ export class EncryptionService {
     private key: Buffer;
 
     constructor(secretKey?: string) {
-        // In production, this should be derived from SKALE BITE
-        const key = secretKey || process.env.ENCRYPTION_KEY || "default-demo-key-32-characters!!";
+        // Key is always required — no static fallback allowed.
+        // Pass key explicitly from index.ts (which reads from env and hard-crashes if absent).
+        const key = secretKey || process.env.ENCRYPTION_KEY;
+        if (!key || key.trim() === "") {
+            throw new Error(
+                "ENCRYPTION_KEY is required. Set it in your .env file.\n" +
+                "Generate one with: node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\""
+            );
+        }
         this.key = crypto.createHash("sha256").update(key).digest();
     }
 

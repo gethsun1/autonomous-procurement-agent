@@ -1,5 +1,8 @@
 /**
- * Mock vendor data for procurement simulation
+ * SIMULATED_MARKETPLACE_VENDORS
+ * These are simulated vendors for the procurement demo marketplace.
+ * They are NOT live external APIs or real companies.
+ * Each vendor has a testnet wallet address for the payment escrow demo.
  */
 
 export interface Vendor {
@@ -8,13 +11,14 @@ export interface Vendor {
     description: string;
     serviceType: string;
     pricePerMonth: number;
-    sla: number; // Percentage uptime
+    sla: number;           // Percentage uptime
     reputationScore: number; // Out of 10
     features: string[];
     contactEmail: string;
+    walletAddress: string; // Testnet wallet for escrow payment demo
 }
 
-export const MOCK_VENDORS: Vendor[] = [
+export const SIMULATED_VENDORS: Vendor[] = [
     {
         id: "vendor_1",
         name: "ChainMetrics Pro",
@@ -31,6 +35,7 @@ export const MOCK_VENDORS: Vendor[] = [
             "Historical data access (3 years)",
         ],
         contactEmail: "sales@chainmetrics.io",
+        walletAddress: "0x1111111111111111111111111111111111111111",
     },
     {
         id: "vendor_2",
@@ -48,6 +53,7 @@ export const MOCK_VENDORS: Vendor[] = [
             "API rate limit: 10k req/min",
         ],
         contactEmail: "contact@blockinsight.com",
+        walletAddress: "0x2222222222222222222222222222222222222222",
     },
     {
         id: "vendor_3",
@@ -65,6 +71,7 @@ export const MOCK_VENDORS: Vendor[] = [
             "Email support",
         ],
         contactEmail: "support@cryptodatahub.com",
+        walletAddress: "0x3333333333333333333333333333333333333333",
     },
     {
         id: "vendor_4",
@@ -83,6 +90,7 @@ export const MOCK_VENDORS: Vendor[] = [
             "Dedicated account manager",
         ],
         contactEmail: "enterprise@omnichain.ai",
+        walletAddress: "0x4444444444444444444444444444444444444444",
     },
     {
         id: "vendor_5",
@@ -100,33 +108,33 @@ export const MOCK_VENDORS: Vendor[] = [
             "Documentation portal",
         ],
         contactEmail: "hello@datachain.dev",
+        walletAddress: "0x5555555555555555555555555555555555555555",
     },
 ];
 
+// Keep old export name for compatibility
+export const MOCK_VENDORS = SIMULATED_VENDORS;
+
 /**
- * Get all available vendors
+ * Get all available simulated marketplace vendors.
  */
 export function getAllVendors(): Vendor[] {
-    return MOCK_VENDORS;
+    return SIMULATED_VENDORS;
 }
 
 /**
  * Get vendor by ID
  */
 export function getVendorById(id: string): Vendor | undefined {
-    return MOCK_VENDORS.find((vendor) => vendor.id === id);
+    return SIMULATED_VENDORS.find((vendor) => vendor.id === id);
 }
 
 /**
  * Filter vendors by price range
  */
-export function getVendorsByPriceRange(
-    minPrice: number,
-    maxPrice: number
-): Vendor[] {
-    return MOCK_VENDORS.filter(
-        (vendor) =>
-            vendor.pricePerMonth >= minPrice && vendor.pricePerMonth <= maxPrice
+export function getVendorsByPriceRange(minPrice: number, maxPrice: number): Vendor[] {
+    return SIMULATED_VENDORS.filter(
+        (vendor) => vendor.pricePerMonth >= minPrice && vendor.pricePerMonth <= maxPrice
     );
 }
 
@@ -134,5 +142,5 @@ export function getVendorsByPriceRange(
  * Filter vendors by minimum SLA
  */
 export function getVendorsByMinSLA(minSLA: number): Vendor[] {
-    return MOCK_VENDORS.filter((vendor) => vendor.sla >= minSLA);
+    return SIMULATED_VENDORS.filter((vendor) => vendor.sla >= minSLA);
 }

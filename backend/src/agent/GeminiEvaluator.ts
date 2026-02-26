@@ -23,6 +23,7 @@ export interface EvaluationResult {
     rankedVendors: VendorScore[];
     recommendation: string;
     timestamp: string;
+    evaluationMode: "LIVE" | "MOCK"; // LIVE = real Gemini, MOCK = fallback (API failed)
 }
 
 export class GeminiEvaluator {
@@ -31,8 +32,8 @@ export class GeminiEvaluator {
 
     constructor(apiKey: string) {
         this.genAI = new GoogleGenerativeAI(apiKey);
-        // Using gemini-1.5-flash with latest SDK
-        this.model = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        // gemini-2.0-flash: confirmed available on this API key (2026-02-26)
+        this.model = this.genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     }
 
     /**
@@ -61,18 +62,14 @@ export class GeminiEvaluator {
                 rankedVendors: evaluation,
                 recommendation: this.generateRecommendation(evaluation),
                 timestamp: new Date().toISOString(),
+                evaluationMode: "LIVE",
             };
-        } catch (error) {
-            console.error("Gemini evaluation error:", error);
-            console.log("⚠️  Using fallback mock evaluation for demo purposes");
-
-            // Fallback: Use mock evaluation for demo
-            const mockEvaluation = this.createMockEvaluation(vendors, criteria);
-            return {
-                rankedVendors: mockEvaluation,
-                recommendation: this.generateRecommendation(mockEvaluation),
-                timestamp: new Date().toISOString(),
-            };
+        } catch (error: any) {
+            // No mock fallback — surface the real error so operators know
+            // the Gemini API is unavailable and can fix it.
+            const msg = error?.message || String(error);
+            console.error(`❌ Gemini evaluation failed: ${msg}`);
+            throw new Error(`Gemini API error: ${msg}`);
         }
     }
 
@@ -205,45 +202,4 @@ Return ONLY the JSON object, no additional text.`;
         return `Recommended: ${topVendor.vendorName} (Score: ${topVendor.totalScore.toFixed(1)}/10). ${topVendor.reasoning}`;
     }
 
-    /**
-     * Create mock evaluation for demo/testing when Gemini API is unavailable
-     */
-    private createMockEvaluation(vendors: Vendor[], criteria: EvaluationCriteria): VendorScore[] {
-        const scores = vendors.map((vendor) => {
-            const totalCost = (vendor.pricePerMonth * criteria.durationDays) / 30;
-
-            // Calculate scores based on vendor attributes
-            const costScore = totalCost <= criteria.maxBudget
-                ? 10 - (totalCost / criteria.maxBudget) * 5 // Lower price = higher score
-                : 0;
-
-            const qualityScore = vendor.reputationScore; // Use reputation as quality proxy
-            const slaScore = (vendor.sla / 100) * 10; // Convert % to 0-10 scale
-
-            // Weighted total (40% cost, 35% quality, 25% SLA)
-            const totalScore = costScore * 0.4 + qualityScore * 0.35 + slaScore * 0.25;
-
-            const meetsConstraints =
-                totalCost <= criteria.maxBudget &&
-                qualityScore >= criteria.minQualityScore;
-
-            return {
-                vendorId: vendor.id,
-                vendorName: vendor.name,
-                totalScore: parseFloat(totalScore.toFixed(2)),
-                costScore: parseFloat(costScore.toFixed(2)),
-                qualityScore: parseFloat(qualityScore.toFixed(2)),
-                slaScore: parseFloat(slaScore.toFixed(2)),
-                reasoning: meetsConstraints
-                    ? `Strong performer with ${vendor.sla}% uptime and ${vendor.features.length} enterprise features. Fits within budget at $${vendor.pricePerMonth}/month.`
-                    : totalCost > criteria.maxBudget
-                        ? `Exceeds budget constraint ($${totalCost} > $${criteria.maxBudget})`
-                        : `Quality score ${qualityScore} below minimum threshold ${criteria.minQualityScore}`,
-                meetsConstraints,
-            };
-        });
-
-        // Sort by totalScore descending
-        return scores.sort((a, b) => b.totalScore - a.totalScore);
-    }
 }
