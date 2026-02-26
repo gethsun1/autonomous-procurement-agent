@@ -2,7 +2,7 @@
 
 ![Cover Image](./cover-image.png)
 
-> **SKALE x402 Hackathon Submission** | Live on SKALE Base Sepolia Testnet
+> **SKALE x402** | Live on SKALE Base Sepolia Testnet
 
 A fully autonomous procurement system combining AI decision-making (Google Gemini), privacy-preserving execution (SKALE BITE), and on-chain settlement (x402 + AP2). Built on SKALE.
 
@@ -437,7 +437,6 @@ This prevents AI hallucinations from causing invalid payments.
 
 ---
 
-## 🏆 Hackathon Alignment
 
 ### SKALE x402 Usage
 
