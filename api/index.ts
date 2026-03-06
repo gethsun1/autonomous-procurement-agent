@@ -14,6 +14,7 @@ import { BlockchainService } from "../backend/src/services/BlockchainService";
 import { EncryptionService } from "../backend/src/services/EncryptionService";
 import { AgentOrchestrator, ProcurementRequest } from "../backend/src/agent/AgentOrchestrator";
 import { getAllVendors, getVendorById } from "../backend/src/data/VendorData";
+import { testingLogger } from "../backend/src/services/TestingLogger";
 
 // Load environment variables
 dotenv.config();
@@ -182,14 +183,14 @@ app.get("/api/procurement/:workflowId/status", async (req, res) => {
     try {
         const workflowId = parseInt(req.params.workflowId);
         const orch = await getOrchestrator();
-        
+
         // First try in-memory storage (same request cycle)
         let workflow = orch.getWorkflowStatus(workflowId);
 
         // If not in memory, fetch from blockchain (serverless fallback)
         if (!workflow) {
             const blockchainWorkflow = await orch.getBlockchainService().getWorkflowFromBlockchain(workflowId);
-            
+
             if (!blockchainWorkflow) {
                 return res.status(404).json({
                     success: false,
@@ -272,6 +273,16 @@ app.get("/api/procurement/:workflowId/evaluation", async (req, res) => {
     }
 });
 
+app.get("/api/testing-logs", (req, res) => {
+    try {
+        const events = testingLogger.getRecentEvents();
+        res.json({ success: true, events });
+    } catch (error) {
+        console.error("Error getting testing logs:", error);
+        res.status(500).json({ success: false, error: "Failed to read logs" });
+    }
+});
+
 // Root endpoint redirect
 app.get("/api", (req, res) => {
     res.json({
@@ -285,7 +296,8 @@ app.get("/api", (req, res) => {
             "POST /api/procurement/request",
             "POST /api/procurement/:workflowId/execute",
             "GET /api/procurement/:workflowId/status",
-            "GET /api/procurement/:workflowId/evaluation"
+            "GET /api/procurement/:workflowId/evaluation",
+            "GET /api/testing-logs"
         ]
     });
 });

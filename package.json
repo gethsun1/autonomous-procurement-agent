@@ -1,7 +1,7 @@
 {
   "name": "autonomous-procurement-agent",
   "version": "1.0.0",
-  "description": "Autonomous Procurement Agent for Agentic Commerce - SKALE x402 Hackathon",
+  "description": "Autonomous Procurement Agent for Agentic Commerce. Built on SKALE.",
   "private": true,
   "workspaces": [
     "frontend",
@@ -25,13 +25,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/autonomous-procurement-agent"
+    "url": "https://github.com/gethsun1/autonomous-procurement-agent"
   },
   "keywords": [
     "blockchain",
     "ai",
     "procurement",
     "skale",
+    "skale-network",
+    "skale-base",
+    "erc-8004",
     "gemini",
     "hackathon"
   ],

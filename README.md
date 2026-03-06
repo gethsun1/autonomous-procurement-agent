@@ -34,9 +34,9 @@ All contracts are live on **SKALE Base Sepolia Testnet**:
 ## ⛓️ Built on SKALE
 
 **Network:** SKALE Base Sepolia  
-**ERC-8004 Agent Address:** *(see `contracts/deployments/latest.json` after deploy)*  
-**Local Registry Address:** *(see `contracts/deployments/latest.json` after deploy)*  
-**Registration Tx Hash:** *(populated by `npm run deploy`)*  
+**ERC-8004 Agent Address:** [`0x881c5b9a28CCEaa78B89F2a61A82294c5Baf8e10`](https://base-sepolia-testnet-explorer.skalenodes.com/address/0x881c5b9a28CCEaa78B89F2a61A82294c5Baf8e10)  
+**Local Registry Address:** [`0xa54B08e97a5Ac95Bd59928B2c32a8B18a0Fd58f6`](https://base-sepolia-testnet-explorer.skalenodes.com/address/0xa54B08e97a5Ac95Bd59928B2c32a8B18a0Fd58f6)  
+**Registration Tx Hash:** [`0x2b851515406bc7e54759332074134b3085a2e70cf8da92e03870afef45512dac`](https://base-sepolia-testnet-explorer.skalenodes.com/tx/0x2b851515406bc7e54759332074134b3085a2e70cf8da92e03870afef45512dac)  
 **Explorer:** [base-sepolia-testnet-explorer.skalenodes.com](https://base-sepolia-testnet-explorer.skalenodes.com/)
 
 ### Canonical ERC-8004 Registries (SKALE Base Sepolia)

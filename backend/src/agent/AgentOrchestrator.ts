@@ -3,6 +3,7 @@ import { DecisionValidator, DecisionConstraints } from "./DecisionValidator";
 import { BlockchainService } from "../services/BlockchainService";
 import { EncryptionService } from "../services/EncryptionService";
 import { getAllVendors, getVendorById } from "../data/VendorData";
+import { testingLogger } from "../services/TestingLogger";
 import * as fs from "fs";
 
 export enum AgentState {
@@ -346,11 +347,15 @@ export class AgentOrchestrator {
     ) {
         const workflow = this.workflows.get(workflowId);
         if (workflow) {
-            this.workflows.set(workflowId, {
+            const newState = {
                 ...workflow,
                 ...updates,
                 state,
-            });
+            };
+            this.workflows.set(workflowId, newState);
+
+            // Log the transition for testing readiness dashboard
+            testingLogger.logEvent(workflowId, state, updates);
         }
     }
 
