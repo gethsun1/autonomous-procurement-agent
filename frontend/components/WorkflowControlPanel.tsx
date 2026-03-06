@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Info, Play } from "lucide-react";
+import InfoTooltip from "@/components/InfoTooltip";
 
 export interface DashboardProcurementData {
     brief: string;
@@ -45,7 +46,10 @@ export default function WorkflowControlPanel({ onSubmit, loading }: WorkflowCont
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2 group">
                         <label className="text-[10px] font-mono text-slate-500 uppercase tracking-wider flex items-center justify-between">
-                            Budget Limit
+                            <span className="flex items-center">
+                                Budget Limit
+                                <InfoTooltip content="Set the rigid maximum budget in USDC for the autonomous procurement." />
+                            </span>
                             <span className="text-[10px] text-slate-600">USDC</span>
                         </label>
                         <div className="relative">
@@ -79,7 +83,11 @@ export default function WorkflowControlPanel({ onSubmit, loading }: WorkflowCont
                 {/* Row 2 */}
                 <div className="space-y-3 group">
                     <label className="text-[10px] font-mono text-slate-500 uppercase tracking-wider flex justify-between items-center">
-                        <span>Evaluation Priority <span className="text-slate-600 ml-1">(Execution Constraints)</span></span>
+                        <span className="flex items-center">
+                            Evaluation Priority
+                            <InfoTooltip content="Determines which weighted algorithm the agent uses to select the winning vendor proposal." />
+                            <span className="text-slate-600 ml-1">(Execution Constraints)</span>
+                        </span>
                         <span className="text-[9px] text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity">Max 3 vendors evaluated</span>
                     </label>
                     <div className="grid grid-cols-3 gap-3">

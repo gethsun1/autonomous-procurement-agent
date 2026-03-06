@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import BackgroundMesh from "@/components/BackgroundMesh";
+import { WalletProvider } from "@/context/WalletContext";
 
 export const metadata: Metadata = {
   title: "Autonomous Procurement Agent | Cyber-Organic Noir",
@@ -37,8 +38,10 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <BackgroundMesh />
-        {children}
+        <WalletProvider>
+          <BackgroundMesh />
+          {children}
+        </WalletProvider>
       </body>
     </html>
   );

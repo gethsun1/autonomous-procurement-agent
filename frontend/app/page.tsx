@@ -15,6 +15,8 @@ import EconomicActivity from "@/components/EconomicActivity";
 import AgentRegistryPanel from "@/components/AgentRegistryPanel";
 import TestWalletManager from "@/components/TestWalletManager";
 import InsufficientFundsAlert from "@/components/InsufficientFundsAlert";
+import ApiErrorModal from "@/components/ApiErrorModal";
+import OnboardingTour from "@/components/OnboardingTour";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
@@ -34,6 +36,7 @@ export default function Dashboard() {
   const [workflow, setWorkflow] = useState<WorkflowData | null>(null);
   const [loading, setLoading] = useState(false);
   const [polling, setPolling] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   // Poll for workflow updates
   useEffect(() => {
@@ -55,6 +58,9 @@ export default function Dashboard() {
             data.workflow.state === "Error"
           ) {
             setPolling(false);
+            if (data.workflow.state === "Error" && data.workflow.error) {
+              setShowErrorModal(true);
+            }
           }
 
           // Fetch evaluation when available
@@ -129,8 +135,17 @@ export default function Dashboard() {
         request: formData,
         error: error.message
       });
+      setShowErrorModal(true);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePaymentSuccess = () => {
+    // Force a re-poll or state update to acknowledge the payment immediately
+    if (workflow) {
+      setWorkflow({ ...workflow, state: 'PaymentPending' });
+      setPolling(true);
     }
   };
 
@@ -176,7 +191,7 @@ export default function Dashboard() {
           <div className="xl:col-span-3">
             <SystemOverview />
           </div>
-          <div className="xl:col-span-1 h-full font-mono text-xs text-white">
+          <div className="xl:col-span-1 h-full font-mono text-xs text-white tour-wallet-manager">
             {/* Replace or wrap with a dynamic height component if necessary */}
             <div className="h-full">
               <TestWalletManager />
@@ -186,10 +201,10 @@ export default function Dashboard() {
 
         {/* Row 2: Agent Operations & Event Log */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-stretch">
-          <div className="xl:col-span-2">
+          <div className="xl:col-span-2 tour-agent-ops">
             <AgentOperationsPanel currentState={workflow?.state || "Initialized"} />
           </div>
-          <div className="xl:col-span-1 border border-white/5 rounded-xl h-full font-mono text-xs overflow-hidden flex flex-col bg-[#121821]">
+          <div className="xl:col-span-1 border border-white/5 rounded-xl h-full font-mono text-xs overflow-hidden flex flex-col bg-[#121821] tour-event-log">
             <EventLogPanel />
           </div>
         </div>
@@ -199,10 +214,19 @@ export default function Dashboard() {
           <div className="xl:col-span-2 space-y-8 flex flex-col">
 
             {/* Control Panel / Actions */}
-            <WorkflowControlPanel onSubmit={handleSubmitRequest} loading={loading} />
+            <div className="tour-workflow-control">
+              <WorkflowControlPanel onSubmit={handleSubmitRequest} loading={loading} />
+            </div>
 
-            {/* Error Notifications */}
-            {workflow?.error && (
+            {/* Modal for API/Quota errors */}
+            <ApiErrorModal
+              isOpen={showErrorModal}
+              onClose={() => setShowErrorModal(false)}
+              error={workflow?.error || null}
+            />
+
+            {/* In-line Error Notifications for specific cases like insufficient funds */}
+            {workflow?.error && workflow.error.toLowerCase().includes("funds") && (
               <InsufficientFundsAlert
                 error={workflow.error}
                 walletAddress="0x075823CffDD46A492A971Cf98D57FB35A5912Ec9"
@@ -226,6 +250,8 @@ export default function Dashboard() {
                     timeline={generateTimeline(workflow.state)}
                     escrowTx={workflow.paymentTxHash}
                     settlementTx={workflow.state === 'Completed' || workflow.state === 'Settled' ? '0xSAMPLE_SETTLEMENT_TX' : undefined}
+                    status={workflow.state}
+                    onPaymentSuccess={handlePaymentSuccess}
                   />
                 </motion.div>
               ) : (
@@ -257,6 +283,8 @@ export default function Dashboard() {
 
       </main>
 
+      {/* Global Interactive Elements */}
+      <OnboardingTour />
     </div>
   );
 }

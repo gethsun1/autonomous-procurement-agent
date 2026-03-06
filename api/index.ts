@@ -179,6 +179,36 @@ app.post("/api/procurement/:workflowId/execute", async (req, res) => {
     }
 });
 
+app.post("/api/procurement/:workflowId/confirm-payment", async (req, res) => {
+    try {
+        const workflowId = parseInt(req.params.workflowId);
+        const { txHash } = req.body;
+
+        if (!txHash) {
+            return res.status(400).json({ success: false, error: "Missing txHash" });
+        }
+
+        const orch = await getOrchestrator();
+
+        // Resume execution asynchronously
+        orch.resumeFlowAfterPayment(workflowId, txHash).catch((error) => {
+            console.error(`Workflow ${workflowId} settlement failed:`, error);
+        });
+
+        res.json({
+            success: true,
+            message: "Payment confirmed, proceeding to settlement",
+            workflowId,
+        });
+    } catch (error) {
+        console.error("Error confirming payment:", error);
+        res.status(500).json({
+            success: false,
+            error: error instanceof Error ? error.message : "Unknown error",
+        });
+    }
+});
+
 app.get("/api/procurement/:workflowId/status", async (req, res) => {
     try {
         const workflowId = parseInt(req.params.workflowId);
@@ -295,6 +325,7 @@ app.get("/api", (req, res) => {
             "GET /api/vendors/:id",
             "POST /api/procurement/request",
             "POST /api/procurement/:workflowId/execute",
+            "POST /api/procurement/:workflowId/confirm-payment",
             "GET /api/procurement/:workflowId/status",
             "GET /api/procurement/:workflowId/evaluation",
             "GET /api/testing-logs"

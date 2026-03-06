@@ -133,10 +133,40 @@ export class AgentOrchestrator {
             await this.selectionPhase(workflowId);
             log("Phase 3: Selection complete");
 
-            // Phase 4: Payment
-            log("Phase 4: Payment start");
-            await this.paymentPhase(workflowId);
-            log("Phase 4: Payment complete");
+            // WAITING FOR FRONTEND PAYMENT
+            // The workflow will now pause here, waiting for the user to sign the tx.
+            log("Phase 4: Waiting for UI Payment Execution");
+            this.updateWorkflowState(workflowId, AgentState.PaymentPending);
+
+            // Note: Payment and Settlement phases are now triggered by the new confirmPayment endpoint
+        } catch (error) {
+            log(`Workflow failed: ${error}`);
+            this.updateWorkflowState(workflowId, AgentState.Error, {
+                error: error instanceof Error ? error.message : String(error),
+            });
+            throw error;
+        }
+    }
+
+    /**
+     * Resume flow after user confirms payment on the UI
+     */
+    async resumeFlowAfterPayment(workflowId: number, txHash: string): Promise<void> {
+        const log = (msg: string) => {
+            console.log(`[Workflow ${workflowId} Resume] ${msg}`);
+        };
+
+        try {
+            const workflow = this.workflows.get(workflowId);
+            if (!workflow) throw new Error(`Workflow ${workflowId} not found`);
+            if (workflow.state !== AgentState.PaymentPending) {
+                throw new Error(`Workflow ${workflowId} is in state ${workflow.state}, expected PaymentPending`);
+            }
+
+            log(`Received payment confirmation: ${txHash}`);
+            this.updateWorkflowState(workflowId, AgentState.PaymentPending, {
+                paymentTxHash: txHash,
+            });
 
             // Phase 5: Settlement
             log("Phase 5: Settlement start");
@@ -148,9 +178,9 @@ export class AgentOrchestrator {
             await this.completionPhase(workflowId);
             log("Phase 6: Completion complete");
 
-            log("Workflow completed successfully");
+            log("Workflow resumed and completed successfully");
         } catch (error) {
-            log(`Workflow failed: ${error}`);
+            log(`Workflow resume failed: ${error}`);
             this.updateWorkflowState(workflowId, AgentState.Error, {
                 error: error instanceof Error ? error.message : String(error),
             });
@@ -253,43 +283,6 @@ export class AgentOrchestrator {
         );
 
         this.updateWorkflowState(workflowId, AgentState.Selection);
-    }
-
-    /**
-     * Payment: Execute payment via x402
-     */
-    private async paymentPhase(workflowId: number) {
-        console.log(`💰 Payment phase for workflow ${workflowId}...`);
-
-        const workflow = this.workflows.get(workflowId)!;
-        const vendor = getVendorById(workflow.selectedVendorId!);
-
-        if (!vendor) {
-            throw new Error("Selected vendor not found");
-        }
-
-        const paymentAmount =
-            (vendor.pricePerMonth * workflow.request.durationDays) / 30;
-
-        // Use the vendor's actual wallet address — no hardcoded fallback
-        if (!vendor.walletAddress) {
-            throw new Error(`Vendor ${vendor.id} has no walletAddress configured in VendorData`);
-        }
-        const vendorAddress = vendor.walletAddress;
-
-        console.log(`💰 Sending payment to vendor wallet: ${vendorAddress}`);
-
-        const txHash = await this.blockchainService.executePayment(
-            workflowId,
-            vendorAddress,
-            paymentAmount
-        );
-
-        this.updateWorkflowState(workflowId, AgentState.PaymentPending, {
-            paymentTxHash: txHash,
-        });
-
-        console.log(`✅ Payment executed: ${txHash}`);
     }
 
     /**
