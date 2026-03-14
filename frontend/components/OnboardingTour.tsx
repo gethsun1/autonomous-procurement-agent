@@ -73,7 +73,7 @@ export default function OnboardingTour() {
                 <div className="space-y-2 text-left">
                     <h3 className="text-sm font-bold text-[var(--cyber-lime)] uppercase tracking-widest">Test Wallet Manager</h3>
                     <p className="text-[11px] font-mono text-slate-300">
-                        First, use the Test Wallet Manager to connect your Web3 wallet, get free gas (sFUEL), and mint custom Test USDC to fund the AI's agentic procurements.
+                        First, use the Test Wallet Manager to connect your Web3 wallet, get free gas (CREDIT), and mint custom Test USDC to fund the AI's agentic procurements.
                     </p>
                 </div>
             ),

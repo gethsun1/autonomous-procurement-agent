@@ -13,14 +13,14 @@ export default function SystemOverview() {
                 <h2 className="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">
                     System Overview
                 </h2>
-                <span className="text-[10px] font-mono text-[var(--kinetic-teal)] bg-[var(--kinetic-teal)]/10 px-2 py-0.5 rounded border border-[var(--kinetic-teal)]/20 uppercase tracking-widest">
+                <span className="text-xs font-mono text-[var(--kinetic-teal)] bg-[var(--kinetic-teal)]/10 px-2 py-0.5 rounded border border-[var(--kinetic-teal)]/20 uppercase tracking-widest">
                     Operational Control
                 </span>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 divide-x divide-y md:divide-y-0 divide-white/5">
                 {metrics.map((m, i) => (
-                    <div key={i} className="p-6 flex flex-col justify-between items-center text-center">
-                        <span className="text-[10px] sm:text-xs font-mono text-slate-500 uppercase tracking-wider mb-2">
+                    <div key={i} className="p-8 flex flex-col justify-between items-center text-center">
+                        <span className="text-xs sm:text-sm font-mono text-slate-500 uppercase tracking-wider mb-2">
                             {m.label}
                         </span>
                         <div className="flex items-baseline gap-1">

@@ -187,7 +187,7 @@ export default function Dashboard() {
       <main className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 flex flex-col gap-8">
 
         {/* Row 1: System Overview & Test Wallet */}
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 items-stretch">
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-8 items-stretch">
           <div className="xl:col-span-3">
             <SystemOverview />
           </div>
@@ -200,7 +200,7 @@ export default function Dashboard() {
         </div>
 
         {/* Row 2: Agent Operations & Event Log */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-stretch">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-stretch">
           <div className="xl:col-span-2 tour-agent-ops">
             <AgentOperationsPanel currentState={workflow?.state || "Initialized"} />
           </div>
@@ -210,7 +210,7 @@ export default function Dashboard() {
         </div>
 
         {/* Row 3: Main Workflow Intelligence */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           <div className="xl:col-span-2 space-y-8 flex flex-col">
 
             {/* Control Panel / Actions */}

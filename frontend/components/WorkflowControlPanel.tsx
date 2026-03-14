@@ -36,21 +36,21 @@ export default function WorkflowControlPanel({ onSubmit, loading }: WorkflowCont
                 <h2 className="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">
                     Create Procurement Workflow
                 </h2>
-                <span className="text-[10px] font-mono text-yellow-500 bg-yellow-500/10 px-2 py-0.5 rounded border border-yellow-500/20 uppercase tracking-widest">
+                <span className="text-xs font-mono text-yellow-500 bg-yellow-500/10 px-2 py-0.5 rounded border border-yellow-500/20 uppercase tracking-widest">
                     Execution Agent
                 </span>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-8 space-y-8">
                 {/* Row 1 */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2 group">
-                        <label className="text-[10px] font-mono text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                        <label className="text-xs font-mono text-slate-500 uppercase tracking-wider flex items-center justify-between">
                             <span className="flex items-center">
                                 Budget Limit
                                 <InfoTooltip content="Set the rigid maximum budget in USDC for the autonomous procurement." />
                             </span>
-                            <span className="text-[10px] text-slate-600">USDC</span>
+                            <span className="text-xs text-slate-600">USDC</span>
                         </label>
                         <div className="relative">
                             <input
@@ -62,11 +62,11 @@ export default function WorkflowControlPanel({ onSubmit, loading }: WorkflowCont
                             />
                             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-mono text-sm uppercase">USDC</span>
                         </div>
-                        <p className="text-[9px] font-mono text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity">Maximum budget allocated to this procurement round.</p>
+                        <p className="text-xs font-mono text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity">Maximum budget allocated to this procurement round.</p>
                     </div>
 
                     <div className="space-y-2 group">
-                        <label className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">
+                        <label className="text-xs font-mono text-slate-500 uppercase tracking-wider">
                             Supplier Category
                         </label>
                         <input
@@ -76,19 +76,19 @@ export default function WorkflowControlPanel({ onSubmit, loading }: WorkflowCont
                             className="w-full bg-[#0B0F14] border border-white/10 rounded-lg px-4 py-3 text-white font-mono focus:border-[var(--kinetic-teal)] focus:ring-1 focus:ring-[var(--kinetic-teal)] outline-none transition-all"
                             placeholder="e.g. Logistics API"
                         />
-                        <p className="text-[9px] font-mono text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity">The specific service or product category to procure.</p>
+                        <p className="text-xs font-mono text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity">The specific service or product category to procure.</p>
                     </div>
                 </div>
 
                 {/* Row 2 */}
                 <div className="space-y-3 group">
-                    <label className="text-[10px] font-mono text-slate-500 uppercase tracking-wider flex justify-between items-center">
+                    <label className="text-xs font-mono text-slate-500 uppercase tracking-wider flex justify-between items-center">
                         <span className="flex items-center">
                             Evaluation Priority
                             <InfoTooltip content="Determines which weighted algorithm the agent uses to select the winning vendor proposal." />
                             <span className="text-slate-600 ml-1">(Execution Constraints)</span>
                         </span>
-                        <span className="text-[9px] text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity">Max 3 vendors evaluated</span>
+                        <span className="text-xs text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity">Max 3 vendors evaluated</span>
                     </label>
                     <div className="grid grid-cols-3 gap-3">
                         {["Lowest Cost", "Balanced", "Reliability"].map(opt => (
@@ -110,11 +110,11 @@ export default function WorkflowControlPanel({ onSubmit, loading }: WorkflowCont
                 <div className="pt-4 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-white/5">
                     <div className="flex items-center gap-3 px-3 py-2 rounded bg-black/40 border border-white/5 text-slate-400 flex-1 relative group cursor-help">
                         <Info className="w-4 h-4 text-[var(--kinetic-teal)] min-w-[16px]" />
-                        <span className="text-[10px] font-mono leading-tight">
+                        <span className="text-xs font-mono leading-tight">
                             Defines the economic boundaries under which the agent may operate.
                         </span>
                         {/* Tooltip */}
-                        <div className="absolute bottom-full left-0 mb-2 w-64 bg-[#121821] border border-[var(--kinetic-teal)]/30 rounded p-2 text-[10px] font-mono text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl z-10">
+                        <div className="absolute bottom-full left-0 mb-2 w-64 bg-[#121821] border border-[var(--kinetic-teal)]/30 rounded p-2 text-xs font-mono text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl z-10">
                             The agent will autonomously evaluate available vendors against these constraints before executing payment.
                         </div>
                     </div>

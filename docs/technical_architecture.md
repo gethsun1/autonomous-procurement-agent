@@ -87,7 +87,7 @@ graph TB
 - **Purpose**: Deterministic execution, state tracking, and token disbursement.
 - **Contracts**:
   - `ProcurementWorkflow`: Main ERC-8004 agent contract dictating the state machine, committing decision hashes, and triggering AP2 hooks.
-  - `X402Escrow`: Holds DemoUSDC or native sFUEL tokens, releases funds exactly when instructed by `ProcurementWorkflow`, and generates unique transaction hashes based on blocks. Protected by `ReentrancyGuard`.
+  - `X402Escrow`: Holds DemoUSDC or native CREDIT tokens, releases funds exactly when instructed by `ProcurementWorkflow`, and generates unique transaction hashes based on blocks. Protected by `ReentrancyGuard`.
   - `AP2Settlement`: Cryptographic settlement verification. Queries `X402Escrow` synchronously to ensure payments physically settled before finalizing workflow completion.
   - `EncryptionHelper`: Handles on-chain storage of BITE AES data with access control, ensuring irreversible public commitments with privacy.
 

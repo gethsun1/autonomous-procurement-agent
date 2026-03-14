@@ -1,5 +1,35 @@
 [
   {
+    "time": "21:21:50",
+    "msg": "Workflow #8 Error",
+    "type": "warning"
+  },
+  {
+    "time": "21:21:50",
+    "msg": "Workflow #8 Discovery",
+    "type": "info"
+  },
+  {
+    "time": "21:17:21",
+    "msg": "Workflow #7 Error",
+    "type": "warning"
+  },
+  {
+    "time": "21:17:19",
+    "msg": "Workflow #7 Discovery",
+    "type": "info"
+  },
+  {
+    "time": "21:12:50",
+    "msg": "Workflow #6 Error",
+    "type": "warning"
+  },
+  {
+    "time": "21:12:48",
+    "msg": "Workflow #6 Discovery",
+    "type": "info"
+  },
+  {
     "time": "17:46:58",
     "msg": "Workflow #5 Error",
     "type": "warning"

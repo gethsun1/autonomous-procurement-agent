@@ -157,7 +157,7 @@ No other blockchain provides this complete stack for autonomous commerce.
 
 **Features:**
 - **Cyber-Aesthetic Design**: Animated violet gradients with glassmorphism effects
-- **Actionable Guidance**: Step-by-step instructions for obtaining testnet sFUEL
+- **Actionable Guidance**: Step-by-step instructions for obtaining testnet CREDIT
 - **One-Click Solutions**: Direct links to SKALE faucets with wallet address auto-display
 - **Status Indicators**: "DEMO_MODE" badge showing system state
 - **Copy-to-Clipboard**: Wallet address with single-click copy functionality
@@ -293,7 +293,7 @@ The autonomous procurement follows a **7-stage state machine**:
 
 - Node.js 18+
 - npm 9+
-- SKALE testnet sFUEL ([Get free tokens](https://sfuelstation.com/))
+- SKALE testnet CREDIT ([Get free tokens](https://sfuelstation.com/))
 - Google Gemini API key ([Get one here](https://ai.google.dev/)) - *Optional for demo*
 
 ### 1. Clone Repository

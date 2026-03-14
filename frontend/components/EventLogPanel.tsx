@@ -14,7 +14,7 @@ export default function EventLogPanel() {
                 </h2>
                 <div className="w-2 h-2 rounded-full bg-[var(--kinetic-teal)] animate-ping" />
             </div>
-            <div className="p-5 overflow-y-auto flex-1 bg-[#0B0F14] font-mono text-[10px] space-y-3">
+            <div className="p-6 overflow-y-auto flex-1 bg-[#0B0F14] font-mono text-xs space-y-3">
                 {events.map((e, i) => (
                     <div key={i} className="flex items-start gap-4">
                         <span className="text-slate-600 shrink-0">{e.time}</span>

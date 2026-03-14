@@ -5,26 +5,25 @@ import { ethers } from "ethers";
 
 // SKALE Base Sepolia Testnet Configuration
 const SKALE_NETWORK = {
-    chainId: "0x5109f0df", // 1359647359 in hex
+    chainId: `0x${Number(process.env.NEXT_PUBLIC_SKALE_CHAIN_ID || "324705682").toString(16)}`,
     chainName: "SKALE Base Sepolia Testnet",
     nativeCurrency: {
-        name: "sFUEL",
-        symbol: "sFUEL",
+        name: "CREDIT",
+        symbol: "CREDIT",
         decimals: 18,
     },
-    rpcUrls: ["https://testnet.skalenodes.com/v1/base-sepolia"],
-    blockExplorerUrls: ["https://base-sepolia.skalenodes.com/"],
+    rpcUrls: [process.env.NEXT_PUBLIC_SKALE_RPC_URL || "https://base-sepolia-testnet.skalenodes.com/v1/jubilant-horrible-ancha"],
+    blockExplorerUrls: ["https://base-sepolia-testnet-explorer.skalenodes.com/"],
 };
 
 // Known custom USDC on this testnet
-// (Update this if your deployment uses a different address)
-export const TEST_USDC_ADDRESS = "0xeD65d83643722e03038CDA69DdeC6bdeCea9D31B";
+export const TEST_USDC_ADDRESS = process.env.NEXT_PUBLIC_DEMO_USDC_ADDRESS || "0x1487aEd82C10c040b2EFf86468803113BA2841b9";
 
 export interface WalletContextState {
     address: string | null;
     isConnected: boolean;
     isCorrectNetwork: boolean;
-    sfuelBalance: string;
+    creditBalance: string;
     usdcBalance: string;
     signer: ethers.Signer | null;
     provider: ethers.BrowserProvider | null;
@@ -40,7 +39,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     const [address, setAddress] = useState<string | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const [isCorrectNetwork, setIsCorrectNetwork] = useState(false);
-    const [sfuelBalance, setSfuelBalance] = useState("0");
+    const [creditBalance, setCreditBalance] = useState("0");
     const [usdcBalance, setUsdcBalance] = useState("0");
     const [signer, setSigner] = useState<ethers.Signer | null>(null);
     const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
@@ -118,7 +117,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
             if (correct) {
                 await fetchBalances(browserProvider, userAddress);
             } else {
-                setSfuelBalance("0");
+                setCreditBalance("0");
                 setUsdcBalance("0");
             }
         } catch (error) {
@@ -128,9 +127,9 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
     const fetchBalances = async (browserProvider: ethers.BrowserProvider, userAddress: string) => {
         try {
-            // Fetch sFUEL (native ETH)
+            // Fetch CREDIT (native gas)
             const balance = await browserProvider.getBalance(userAddress);
-            setSfuelBalance(ethers.formatEther(balance));
+            setCreditBalance(ethers.formatEther(balance));
 
             // Fetch Custom USDC
             const usdcAbi = ["function balanceOf(address owner) view returns (uint256)"];
@@ -180,7 +179,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         setAddress(null);
         setIsConnected(false);
         setIsCorrectNetwork(false);
-        setSfuelBalance("0");
+        setCreditBalance("0");
         setUsdcBalance("0");
         setSigner(null);
     };
@@ -215,7 +214,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
                 address,
                 isConnected,
                 isCorrectNetwork,
-                sfuelBalance,
+                creditBalance,
                 usdcBalance,
                 signer,
                 provider,

@@ -1,35 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  /* Ultra-Vibrant Neo-Cyber Palette */
-  --obsidian: #010203;
-  --charcoal: #05070a;
-  --graphite: #0a0d14;
-  --midnight-slate: #101520;
+  /* Professional & Elegant Palette */
+  --obsidian: #0f172a; /* Slate 900 */
+  --charcoal: #1e293b; /* Slate 800 */
+  --graphite: #334155; /* Slate 700 */
+  --midnight-slate: #0b1120; /* Deep background */
 
-  /* High-Energy Kinetic Colors */
-  --kinetic-teal: #00ffff;
-  /* Electric Cyan */
-  --electric-violet: #d400ff;
-  /* Neon Purple */
-  --cyber-lime: #a2ff00;
-  /* Radioactive Lime */
-  --neon-pink: #ff0055;
-  /* Laser Pink */
-  --signal-red: #FF3B3B;
-  /* Critical Red */
-  --platinum: #ffffff;
+  /* Elegant Accent Colors */
+  --kinetic-teal: #4f46e5; /* Indigo 600 */
+  --electric-violet: #6366f1; /* Indigo 500 */
+  --cyber-lime: #3b82f6; /* Blue 500 */
+  --neon-pink: #ec4899; /* Pink 500 - keep one warm accent just in case */
+  --signal-red: #ef4444; /* Red 500 */
+  --platinum: #f8fafc; /* Slate 50 */
 
   /* Semantic Variables */
-  --bg-primary: var(--obsidian);
-  --bg-surface: var(--graphite);
+  --bg-primary: var(--midnight-slate);
+  --bg-surface: var(--obsidian);
   --accent-primary: var(--kinetic-teal);
   --accent-security: var(--electric-violet);
 
-  /* High-Contrast Glass Effects */
-  --glass-bg: rgba(5, 7, 10, 0.85);
-  --glass-border: rgba(0, 255, 255, 0.2);
-  --glass-shimmer: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent 45%);
+  /* Refined Glass Effects */
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shimmer: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent 45%);
 }
 
 * {
@@ -45,7 +40,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 
-  /* Visual grain and texture */
+  /* Visual grain and texture (very subtle) */
   &::before {
     content: "";
     position: fixed;
@@ -54,7 +49,7 @@ body {
     width: 100%;
     height: 100%;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.06;
+    opacity: 0.02;
     pointer-events: none;
     z-index: 1000;
   }
@@ -119,18 +114,18 @@ h6 {
 
 .glass-card {
   background: var(--bg-surface);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 80px -20px rgba(0, 0, 0, 1);
-  border-radius: 1.75rem;
-  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  border-radius: 1.25rem;
+  transition: all 0.4s ease;
 }
 
 .glass-card:hover {
-  transform: translateY(-10px) scale(1.02);
-  border-color: rgba(0, 255, 255, 0.5);
-  box-shadow: 0 40px 100px -25px rgba(0, 0, 0, 1), 0 0 40px rgba(0, 255, 255, 0.2);
+  transform: translateY(-4px);
+  border-color: rgba(79, 70, 229, 0.3);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6), 0 0 20px rgba(79, 70, 229, 0.1);
 }
 
 /* --- Electric Kinetic Elements --- */
@@ -149,33 +144,33 @@ h6 {
   }
 }
 
-/* --- High-Voltage Buttons --- */
+/* --- Professional Buttons --- */
 .btn-primary {
   width: 100%;
-  padding: 1.4rem 2.5rem;
-  border-radius: 1.25rem;
-  font-weight: 900;
-  color: var(--obsidian);
-  background: linear-gradient(135deg, var(--kinetic-teal) 0%, #00ff8c 100%);
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--kinetic-teal) 0%, var(--cyber-lime) 100%);
   border: none;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow: 0 8px 0 0 #008f9c, 0 15px 40px rgba(0, 255, 255, 0.4);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-size: 1rem;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
 }
 
 .btn-primary:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 14px 0 0 #008f9c, 0 30px 60px rgba(0, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
 }
 
 .btn-primary:active {
-  transform: translateY(6px);
-  box-shadow: 0 0px 0 0 #008f9c;
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px rgba(79, 70, 229, 0.3);
 }
 
 .btn-primary::before {
@@ -193,46 +188,46 @@ h6 {
   left: 100%;
 }
 
-/* --- Cyber Inputs --- */
+/* --- Elegant Inputs --- */
 .input-group {
   position: relative;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 .input-field {
   width: 100%;
-  background: rgba(0, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 1.25rem;
-  padding: 2.2rem 1.5rem 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 1.75rem 1.25rem 0.75rem 1.25rem;
   color: var(--platinum);
   outline: none;
-  transition: all 0.5s ease;
-  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  font-size: 1rem;
 }
 
 .input-field:focus {
-  background: rgba(0, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
   border-color: var(--kinetic-teal);
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
 }
 
 .input-field-encrypted {
   width: 100%;
-  background: rgba(212, 0, 255, 0.05);
-  border: 1px solid rgba(212, 0, 255, 0.4);
-  border-radius: 1.25rem;
-  padding: 2.2rem 1.5rem 1rem 1.5rem;
+  background: rgba(99, 102, 241, 0.05);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 0.75rem;
+  padding: 1.75rem 1.25rem 0.75rem 1.25rem;
   color: var(--platinum);
   outline: none;
-  transition: all 0.5s ease;
-  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  font-size: 1rem;
 }
 
 .input-field-encrypted:focus {
-  background: rgba(212, 0, 255, 0.15);
+  background: rgba(99, 102, 241, 0.1);
   border-color: var(--electric-violet);
-  box-shadow: 0 0 40px rgba(212, 0, 255, 0.4);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
 .input-label {
@@ -252,9 +247,9 @@ h6 {
   top: 0.6rem;
   left: 1.2rem;
   font-size: 0.75rem;
-  font-weight: 900;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.05em;
   color: var(--kinetic-teal);
 }
 

@@ -65,12 +65,52 @@ export class GeminiEvaluator {
                 evaluationMode: "LIVE",
             };
         } catch (error: any) {
-            // No mock fallback — surface the real error so operators know
-            // the Gemini API is unavailable and can fix it.
             const msg = error?.message || String(error);
             console.error(`❌ Gemini evaluation failed: ${msg}`);
-            throw new Error(`Gemini API error: ${msg}`);
+            console.log("⚠️ Falling back to MOCK evaluation mode...");
+
+            // Fallback to MOCK evaluation
+            const evaluation = this.mockEvaluateVendors(vendors, criteria);
+
+            return {
+                rankedVendors: evaluation,
+                recommendation: `[MOCK RECOMMENDATION] ${this.generateRecommendation(evaluation)}`,
+                timestamp: new Date().toISOString(),
+                evaluationMode: "MOCK",
+            };
         }
+    }
+
+    /**
+     * MOCK evaluation logic for fallback or testing when API is unavailable
+     */
+    private mockEvaluateVendors(vendors: Vendor[], criteria: EvaluationCriteria): VendorScore[] {
+        return vendors.map(vendor => {
+            const totalCost = (vendor.pricePerMonth * criteria.durationDays) / 30;
+            
+            // Basic scoring logic for mock mode
+            const costScore = totalCost <= criteria.maxBudget ? 
+                Math.max(0, 10 - (totalCost / criteria.maxBudget) * 5) : 1;
+            
+            const qualityScore = vendor.reputationScore;
+            const slaScore = vendor.sla >= criteria.preferredSLA ? 9 : 6;
+            
+            // Weighted total
+            const totalScore = (costScore * 0.4) + (qualityScore * 0.35) + (slaScore * 0.25);
+            
+            const meetsConstraints = totalCost <= criteria.maxBudget && qualityScore >= criteria.minQualityScore;
+
+            return {
+                vendorId: vendor.id,
+                vendorName: vendor.name,
+                totalScore: parseFloat(totalScore.toFixed(1)),
+                costScore: parseFloat(costScore.toFixed(1)),
+                qualityScore: parseFloat(qualityScore.toFixed(1)),
+                slaScore: parseFloat(slaScore.toFixed(1)),
+                reasoning: `(Self-Ranked Mock) Competitive pricing at $${vendor.pricePerMonth}/mo with ${vendor.sla}% SLA.`,
+                meetsConstraints
+            };
+        }).sort((a, b) => b.totalScore - a.totalScore);
     }
 
     /**

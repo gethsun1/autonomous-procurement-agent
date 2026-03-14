@@ -8,7 +8,7 @@ export default function TestWalletManager() {
         address,
         isConnected,
         isCorrectNetwork,
-        sfuelBalance,
+        creditBalance,
         usdcBalance,
         signer,
         refreshBalances
@@ -67,8 +67,8 @@ export default function TestWalletManager() {
             </div>
 
             <div className="p-6 space-y-5 relative z-10">
-                <p className="text-[10px] font-mono text-slate-400 leading-relaxed">
-                    Use your connected Web3 wallet to manage test funds. Get sFUEL for gas from the SKALE Faucet, and mint custom Test USDC to execute procurement transactions.
+                <p className="text-xs font-mono text-slate-400 leading-relaxed">
+                    Use your connected Web3 wallet to manage test funds. Get CREDIT for gas from the SKALE Faucet, and mint custom Test USDC to execute procurement transactions.
                 </p>
 
                 <div className="bg-[#0B0F14] border border-white/10 rounded-lg p-4 space-y-4">
@@ -81,9 +81,9 @@ export default function TestWalletManager() {
 
                     <div className="flex gap-3">
                         <div className="flex-1 bg-white/5 rounded-md p-3 flex flex-col justify-center items-center border border-white/5 gap-1 shadow-inner">
-                            <span className="text-[9px] text-slate-500 font-mono uppercase tracking-widest">sFUEL Balance</span>
+                            <span className="text-xs text-slate-500 font-mono uppercase tracking-widest">CREDIT Balance</span>
                             <span className="text-sm font-mono text-[var(--kinetic-teal)]">
-                                {isConnected ? parseFloat(sfuelBalance).toFixed(2) : "0.00"}
+                                {isConnected ? parseFloat(creditBalance).toFixed(2) : "0.00"}
                             </span>
                         </div>
                         <div className="flex-1 bg-white/5 rounded-md p-3 flex flex-col justify-center items-center border border-white/5 gap-1 shadow-inner">
@@ -98,10 +98,10 @@ export default function TestWalletManager() {
                 <div className="flex gap-3">
                     <button
                         onClick={handleGetGas}
-                        className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-lg text-[10px] font-mono font-bold uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
+                        className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-lg text-xs font-mono font-bold uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
                     >
                         <Droplets className="w-3.5 h-3.5 text-blue-400" />
-                        Get sFUEL Gas
+                        Get CREDIT Gas
                     </button>
 
                     <button

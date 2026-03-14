@@ -48,7 +48,7 @@ export class BlockchainService {
         if (paymentScaleDivisor !== 1) {
             console.log(
                 `⚠️  Payment scale divisor set to ${paymentScaleDivisor}. ` +
-                `Dollar amounts will be divided by ${paymentScaleDivisor} for testnet sFUEL. ` +
+                `Dollar amounts will be divided by ${paymentScaleDivisor} for testnet CREDIT. ` +
                 `This is visible in the UI.`
             );
         }
@@ -222,11 +222,11 @@ export class BlockchainService {
             if (event && event.args) return event.args.txHash;
             throw new Error("PaymentTriggered event not found in receipt");
         } else {
-            // ETH path (sFUEL on SKALE)
+            // ETH path (CREDIT on SKALE)
             const scaledAmount = amount / this.paymentScaleDivisor;
             const amountWei = ethers.parseEther(scaledAmount.toString());
 
-            console.log(`💰 ETH Payment: $${amount} USD → ${scaledAmount} sFUEL (÷${this.paymentScaleDivisor})`);
+            console.log(`💰 ETH Payment: $${amount} USD → ${scaledAmount} CREDIT (÷${this.paymentScaleDivisor})`);
 
             const tx = await this.contracts.workflow.executePayment(
                 workflowId,

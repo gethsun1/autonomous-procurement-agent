@@ -73,7 +73,7 @@ export default function InsufficientFundsAlert({ error, walletAddress }: Props) 
                             </span>
                         </div>
                         <p className="text-sm text-gray-400 font-light leading-relaxed">
-                            Deployer wallet requires sFUEL to complete on-chain payment execution
+                            Deployer wallet requires CREDIT to complete on-chain payment execution
                         </p>
                     </div>
                 </div>
@@ -111,7 +111,7 @@ export default function InsufficientFundsAlert({ error, walletAddress }: Props) 
                         <div>
                             <p className="text-sm font-medium text-white mb-1">Visit SKALE Faucet</p>
                             <p className="text-xs text-gray-400 font-light">
-                                Get free testnet sFUEL tokens for transaction execution
+                                Get free testnet CREDIT tokens for transaction execution
                             </p>
                         </div>
                     </div>
@@ -150,7 +150,7 @@ export default function InsufficientFundsAlert({ error, walletAddress }: Props) 
                         className="flex-1 min-w-[200px] btn-primary flex items-center justify-center gap-2 group"
                     >
                         <Wallet className="w-4 h-4" />
-                        <span>Get sFUEL Tokens</span>
+                        <span>Get CREDIT Tokens</span>
                         <ExternalLink className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
                     </a>
 
